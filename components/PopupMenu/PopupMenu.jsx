@@ -1,8 +1,11 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import './PopupMenu.css'; // Create this CSS file for styling the PopupMenu
 
-const PopupMenu = ({ show, onClose, postId }) => {
+const PopupMenu = ({ show, onClose, postId, fileLink }) => {
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -24,13 +27,15 @@ const PopupMenu = ({ show, onClose, postId }) => {
       const response = await axios.delete(`/api/post/${postId}/delete-post`);
 
       if (response.status === 200) {
-        console.log(response.data.message);
+        toast.success('Post deleted successfully!'); // Add success toast
         onClose(); // Close the menu after deletion
       } else {
         console.error('Deletion Error:', response.data.error);
+        toast.error('Failed to delete post.'); // Add error toast
       }
     } catch (error) {
       console.error('Deletion Request Failed:', error);
+      toast.error('Failed to delete post.'); // Add error toast
     }
   };
 
@@ -56,7 +61,16 @@ const PopupMenu = ({ show, onClose, postId }) => {
 
   const handleShare = () => {
     // Handle 'Share' action
-    console.log('Share action triggered');
+    if (fileLink) {
+      navigator.clipboard.writeText(fileLink).then(() => {
+        toast.success('Link copied to clipboard!');
+      }).catch(err => {
+        console.error('Failed to copy link:', err);
+        toast.error('Failed to copy link.');
+      });
+    } else {
+      toast.error('No link available to copy.');
+    }
   };
 
   const handleOrganize = () => {
