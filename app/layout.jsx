@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Login";
 import Provider from '../components/Provider';
 
 
@@ -20,7 +20,6 @@ const RootLayout = ({children}) => {
         <body>
           <Provider>
             <main className='gradient '>
-              <Navbar/>
               {children}
             </main>
           </Provider>
