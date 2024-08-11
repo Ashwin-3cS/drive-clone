@@ -1,0 +1,41 @@
+/* PopupMenu.css */
+.popup-menu {
+    position: absolute;
+    background-color: #1C1C1D;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+  }
+  
+  .popup-menu.show {
+    display: block;
+  }
+  
+  .popup-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .popup-menu .menu-item {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .popup-menu .menu-icon {
+    margin-right: 8px;
+  }
+  
+  .popup-menu .arrow-icon {
+    margin-left: auto;
+  }
+  
+  .popup-menu .separator {
+    border-top: 1px solid #eee;
+    margin: 4px 0;
+  }
+  
