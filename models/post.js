@@ -18,6 +18,10 @@ const PostSchema = new Schema(
         fileType: {
             type: String,
             required: [true, 'File type is required'],
+        },
+        fileSize: {
+            type: Number, // Size in bytes
+            required: [true, 'File size is required'],
         }
     },
     {

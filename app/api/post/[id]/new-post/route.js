@@ -19,7 +19,8 @@ const s3 = new S3Client({
 async function uploadFiletoS3(file) {
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     const fileName = file.name;
-    
+    const fileSize = file.size; 
+
     const uniqueFileName = `${uuidv4()}-${fileName}`;
     console.log(`Uploading file: ${fileName} as ${uniqueFileName}`);
 
@@ -42,7 +43,7 @@ async function uploadFiletoS3(file) {
         const fileKey = params.Key;
         console.log(`File stored in S3 with key: ${fileKey}`);
         
-        return { fileName, fileKey, contentType };
+        return { fileName, fileKey, contentType , fileSize};
         
     } catch (error) {
         console.error('S3 Upload Error:', error);
@@ -65,7 +66,7 @@ export const POST = async (request, { params }) => {
         }
 
         console.log('File received. Proceeding with S3 upload.');
-        const { fileName, fileKey, contentType } = await uploadFiletoS3(file);
+        const { fileName, fileKey, contentType, fileSize } = await uploadFiletoS3(file);
 
         const fileUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`; 
         console.log(`File URL: ${fileUrl}`);
@@ -77,7 +78,8 @@ export const POST = async (request, { params }) => {
             creator: userId,
             fileLink: fileUrl,
             fileName: fileName,
-            fileType: contentType
+            fileType: contentType,
+            fileSize: fileSize
         });
 
         await newPost.save();
