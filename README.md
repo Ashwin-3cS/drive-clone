@@ -27,3 +27,13 @@ NEXTAUTH_SECRET=
 
 # Deployed WebApp Link
 https://drive-clone-mkto.onrender.com/
+
+
+# DELETE 
+# CREATE 
+# SEARCH
+# RENAME
+# SHARE 
+# GoogleOAuth
+
+# Successfully DONE
