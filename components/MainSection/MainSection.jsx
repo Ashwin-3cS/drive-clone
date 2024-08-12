@@ -92,6 +92,32 @@ const MainSection = () => {
             <img src="/assets/images/Computer.png" alt="Computers" />
             <h4>Computers</h4>
           </div>
+          <div>
+            <img src="/assets/images/shared.png" alt="Share PNG" />
+            <h4>Shared with me</h4>
+          </div>
+          <div>
+            <img src="/assets/images/recent.png" alt="recent" />
+            <h4>Recent</h4>
+          </div>
+          <div>
+            <img src="/assets/images/stared.png" alt="stared" />
+            <h4>Starred</h4>
+          </div>
+          <div>
+            <img src="/assets/images/spam.png" alt="spam" />
+            <h4>Spam</h4>
+          </div>
+          <div>
+            <img src="/assets/images/trash.png" alt="trash" />
+            <h4>Trash</h4>
+          </div>
+          <div>
+            <img src="/assets/images/StorageIcon.png" alt="spam" />
+            <h4>Storage</h4><span className='ml-2'>(0.02% full)</span>
+          </div>    
+          <section class="storage-outer-limit"><div class="storage-inner-limit"></div></section>
+          <section class="get-more-storage-button"><h4>Get more storage</h4></section>
         </div>
       </div>
 
