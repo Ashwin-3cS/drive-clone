@@ -19,7 +19,7 @@ const MainSection = () => {
       if (status === 'authenticated') {
         try {
           const userId = session.user.id;
-          const response = await axios.get(`http://localhost:3000/api/post/${userId}/get-post`);
+          const response = await axios.get(`/api/post/${userId}/get-post`);
           if (response.data.success) {
             setFiles(response.data.posts);
           } else {
@@ -48,7 +48,7 @@ const MainSection = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`http://localhost:3000/api/post/${session.user.id}/new-post`, formData, {
+      const response = await axios.post(`/api/post/${session.user.id}/new-post`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -56,7 +56,7 @@ const MainSection = () => {
 
       if (response.data.success) {
         console.log('File uploaded successfully:', response.data.newPost);
-        const updatedFiles = await axios.get(`http://localhost:3000/api/post/${session.user.id}/get-post`);
+        const updatedFiles = await axios.get(`api/post/${session.user.id}/get-post`);
         setFiles(updatedFiles.data.posts);
       } else {
         console.error('File upload failed:', response.data.error);

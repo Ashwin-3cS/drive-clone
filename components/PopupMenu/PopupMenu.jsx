@@ -3,14 +3,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import './PopupMenu.css'; // Create this CSS file for styling the PopupMenu
+import './PopupMenu.css';
 
 const PopupMenu = ({ show, onClose, postId, fileLink }) => {
+  const [isRenamePopupVisible, setRenamePopupVisible] = useState(false);
+  const [newFileName, setNewFileName] = useState('');
   const menuRef = useRef(null);
+  const renamePopupRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        menuRef.current && !menuRef.current.contains(event.target) &&
+        (!renamePopupRef.current || !renamePopupRef.current.contains(event.target))
+      ) {
         onClose();
       }
     };
@@ -27,40 +33,41 @@ const PopupMenu = ({ show, onClose, postId, fileLink }) => {
       const response = await axios.delete(`/api/post/${postId}/delete-post`);
 
       if (response.status === 200) {
-        toast.success('Post deleted successfully!'); // Add success toast
-        onClose(); // Close the menu after deletion
+        toast.success('Post deleted successfully!');
+        onClose();
       } else {
         console.error('Deletion Error:', response.data.error);
-        toast.error('Failed to delete post.'); // Add error toast
+        toast.error('Failed to delete post.');
       }
     } catch (error) {
       console.error('Deletion Request Failed:', error);
-      toast.error('Failed to delete post.'); // Add error toast
+      toast.error('Failed to delete post.');
     }
   };
 
-  const handleOpenWith = () => {
-    // Handle 'Open with' action
-    console.log('Open with action triggered');
-  };
-
-  const handleDownload = () => {
-    // Handle 'Download' action
-    console.log('Download action triggered');
-  };
-
   const handleRename = () => {
-    // Handle 'Rename' action
-    console.log('Rename action triggered');
+    setRenamePopupVisible(true);
   };
 
-  const handleMakeCopy = () => {
-    // Handle 'Make a Copy' action
-    console.log('Make a Copy action triggered');
+  const handleRenameSubmit = async () => {
+    try {
+      const response = await axios.put(`/api/post/${postId}/edit-post`, { newFileName });
+
+      if (response.status === 200) {
+        toast.success('File renamed successfully!');
+        setRenamePopupVisible(false);
+        onClose();
+      } else {
+        console.error('Rename Error:', response.data.error);
+        toast.error('Failed to rename file.');
+      }
+    } catch (error) {
+      console.error('Rename Request Failed:', error);
+      toast.error('Failed to rename file.');
+    }
   };
 
   const handleShare = () => {
-    // Handle 'Share' action
     if (fileLink) {
       navigator.clipboard.writeText(fileLink).then(() => {
         toast.success('Link copied to clipboard!');
@@ -73,71 +80,74 @@ const PopupMenu = ({ show, onClose, postId, fileLink }) => {
     }
   };
 
-  const handleOrganize = () => {
-    // Handle 'Organize' action
-    console.log('Organize action triggered');
-  };
-
-  const handleFileInformation = () => {
-    // Handle 'File Information' action
-    console.log('File Information action triggered');
-  };
-
-  const handleOffline = () => {
-    // Handle 'Make available offline' action
-    console.log('Make available offline action triggered');
-  };
-
   if (!show) return null;
 
   return (
-    <div className="popup-menu show" ref={menuRef}>
-      <ul>
-        <li className="menu-item" onClick={handleOpenWith}>
-          <img src="/assets/images/cursor.png" alt="Open with" className="menu-icon" />
-          Open with
-          <img src="/assets/images/right-arrow.png" alt="Arrow" className="arrow-icon" />
-        </li>
-        <li><div className="separator"></div></li>
-        <li className="menu-item" onClick={handleDownload}>
-          <img src="/assets/images/downloads.png" alt="Download" className="menu-icon" />
-          Download
-        </li>
-        <li className="menu-item" onClick={handleRename}>
-          <img src="/assets/images/edit.png" alt="Rename" className="menu-icon" />
-          Rename
-        </li>
-        <li className="menu-item" onClick={handleMakeCopy}>
-          <img src="/assets/images/copy.png" alt="Copy" className="menu-icon" />
-          Make a Copy
-        </li>
-        <li><div className="separator"></div></li>
-        <li className="menu-item" onClick={handleShare}>
-          <img src="/assets/images/sharing.png" alt="Share" className="menu-icon" />
-          Share
-          <img src="/assets/images/right-arrow.png" alt="Arrow" className="arrow-icon" />
-        </li>
-        <li className="menu-item" onClick={handleOrganize}>
-          <img src="/assets/images/open-folder.png" alt="Organize" className="menu-icon" />
-          Organize
-          <img src="/assets/images/right-arrow.png" alt="Arrow" className="arrow-icon" />
-        </li>
-        <li className="menu-item" onClick={handleFileInformation}>
-          <img src="/assets/images/information.png" alt="File Information" className="menu-icon" />
-          File Information
-          <img src="/assets/images/right-arrow.png" alt="Arrow" className="arrow-icon" />
-        </li>
-        <li className="menu-item" onClick={handleOffline}>
-          <img src="/assets/images/offline.png" alt="Offline" className="menu-icon" />
-          Make available offline
-        </li>
-        <li><div className="separator"></div></li>
-        <li className="menu-item" onClick={handleDelete}>
-          <img src="/assets/images/trash.png" alt="Trash" className="menu-icon" />
-          Move to trash
-        </li>
-      </ul>
-    </div>
+    <>
+      <div className="popup-menu show" ref={menuRef}>
+        <ul>
+          <li className="menu-item" onClick={() => console.log("Open with triggered")}>
+            <img src="/assets/images/cursor.png" alt="Open with" className="menu-icon" />
+            Open with
+            <img src="/assets/images/right-arrow.png" alt="Arrow" className="arrow-icon" />
+          </li>
+          <li><div className="separator"></div></li>
+          <li className="menu-item" onClick={() => console.log("Download triggered")}>
+            <img src="/assets/images/downloads.png" alt="Download" className="menu-icon" />
+            Download
+          </li>
+          <li className="menu-item" onClick={handleRename}>
+            <img src="/assets/images/edit.png" alt="Rename" className="menu-icon" />
+            Rename
+          </li>
+          <li className="menu-item" onClick={() => console.log("Make a Copy triggered")}>
+            <img src="/assets/images/copy.png" alt="Copy" className="menu-icon" />
+            Make a Copy
+          </li>
+          <li><div className="separator"></div></li>
+          <li className="menu-item" onClick={handleShare}>
+            <img src="/assets/images/sharing.png" alt="Share" className="menu-icon" />
+            Share
+            <img src="/assets/images/right-arrow.png" alt="Arrow" className="arrow-icon" />
+          </li>
+          <li className="menu-item" onClick={() => console.log("Organize triggered")}>
+            <img src="/assets/images/open-folder.png" alt="Organize" className="menu-icon" />
+            Organize
+            <img src="/assets/images/right-arrow.png" alt="Arrow" className="arrow-icon" />
+          </li>
+          <li className="menu-item" onClick={() => console.log("File Information triggered")}>
+            <img src="/assets/images/information.png" alt="File Information" className="menu-icon" />
+            File Information
+            <img src="/assets/images/right-arrow.png" alt="Arrow" className="arrow-icon" />
+          </li>
+          <li className="menu-item" onClick={() => console.log("Make available offline triggered")}>
+            <img src="/assets/images/offline.png" alt="Offline" className="menu-icon" />
+            Make available offline
+          </li>
+          <li><div className="separator"></div></li>
+          <li className="menu-item" onClick={handleDelete}>
+            <img src="/assets/images/trash.png" alt="Trash" className="menu-icon" />
+            Move to trash
+          </li>
+        </ul>
+      </div>
+
+      {isRenamePopupVisible && (
+        <div className="rename-popup rounded-md" ref={renamePopupRef}>
+          <div className="rename-popup-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Rename File</h3>
+            <input
+              type="text"
+              value={newFileName}
+              onChange={(e) => setNewFileName(e.target.value)}
+              placeholder="New Filename"
+            />
+            <button onClick={handleRenameSubmit} className='btn'>Submit</button>
+            <button onClick={() => setRenamePopupVisible(false)} className='btn'>Cancel</button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

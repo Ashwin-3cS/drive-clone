@@ -16,3 +16,10 @@ Create a Cluster and add the MongoDb-Uri String in .env File
 Create a S3 bucket storage in AWS
 Create The user add it to the group and give the necessary policies and generate the PrivateKey , BucketName, and also region 
 Add it in .env File
+
+
+# Add NextAuthURI for Local Testing as well change this after deployment
+
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL_INTERNAL=http://localhost:3000
+NEXTAUTH_SECRET=

@@ -39,3 +39,34 @@
     margin: 4px 0;
   }
   
+  .rename-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: black;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  
+  }
+  
+  .rename-popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .rename-popup-content input {
+    margin-bottom: 10px;
+    padding: 8px;
+    width: 100%;
+  }
+  
+  .rename-popup-content button {
+    margin: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+  
+  }
+  
