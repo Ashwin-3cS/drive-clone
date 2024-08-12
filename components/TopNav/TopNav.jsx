@@ -3,8 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import "./TopNav.css";
 import axios from "axios";
-import { useSession } from 'next-auth/react';
-import FileList from './FileList'; // Import FileList
+import { signOut, useSession } from 'next-auth/react';
+import FileList from './FileList';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation'; 
 
 const TopNav = () => {
   const [searchText, setSearchText] = useState('');
@@ -12,6 +14,7 @@ const TopNav = () => {
   const [files, setFiles] = useState([]);
   const [searchedResults, setSearchedResults] = useState([]);
   const { data: session, status } = useSession();
+  const router = useRouter(); // 
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -23,7 +26,7 @@ const TopNav = () => {
           const response = await axios.get(`/api/post/${userId}/get-post`);
           console.log("Received GET request");
 
-          const data = response.data.posts; // Access the posts array
+          const data = response.data.posts; 
           console.log("Fetched Files:", data);
 
           if (Array.isArray(data)) {
@@ -57,6 +60,15 @@ const TopNav = () => {
     );
   };
 
+  const handleSignOut = async () => {
+    try {
+      await signOut({ redirect: false }); // Prevent default redirect
+      router.push('/'); // Navigate to homepage
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   if (status === 'loading') {
     return <div>Loading...</div>;
   }
@@ -80,7 +92,14 @@ const TopNav = () => {
         <img src="/assets/images/question.png" alt="Help Icon" />
         <img src="/assets/images/settings.png" alt="Settings Icon" />
         <img src="/assets/images/dots.png" alt="Options Icon" />
-        <img src="/assets/images/account.png" alt="Account Icon" />
+        <Image
+          src={session?.user.image}
+          width={50}
+          height={50}
+          alt='profile-image'
+          className='rounded-badge profile-image'
+        />
+        <div tabIndex={0} role="button" className="btn btn-outline btn-error p-1" onClick={handleSignOut}>LogOut</div>
       </div>
 
       {/* Display the search results */}

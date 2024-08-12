@@ -2,6 +2,13 @@ img {
     height: 17px;
     width: 17px;
   }
+
+  /* profile image size */
+.action-icon-container .profile-image {
+  width: 35px !important;
+  height: 35px !important;
+}
+
   
   #productIcon {
     height: 45px;
