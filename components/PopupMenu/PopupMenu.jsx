@@ -76,7 +76,7 @@ const PopupMenu = ({ show, onClose, postId, fileLink }) => {
         toast.error('Failed to copy link.');
       });
     } else {
-      toast.error('No link available to copy.');
+      toast.error('No link available to copy.')
     }
   };
 
