@@ -76,6 +76,14 @@ const MainSection = () => {
     setFiles((prevFiles) => prevFiles.filter(file => file._id !== deletedFileId));
   };
 
+  const handleRenameFile = (fileId, newFileName) => {
+    setFiles((prevFiles) =>
+      prevFiles.map(file =>
+        file._id === fileId ? { ...file, fileName: newFileName } : file
+      )
+  );
+};
+
   return (
     <section className="main-section">
       <div className="left-nav">
@@ -120,8 +128,8 @@ const MainSection = () => {
             <img src="/assets/images/StorageIcon.png" alt="spam" />
             <h4>Storage</h4><span className='ml-2'>(0.02% full)</span>
           </div>    
-          <section class="storage-outer-limit"><div class="storage-inner-limit"></div></section>
-          <section class="get-more-storage-button"><h4>Get more storage</h4></section>
+          <section className="storage-outer-limit"><div className="storage-inner-limit"></div></section>
+          <section className="get-more-storage-button"><h4>Get more storage</h4></section>
         </div>
       </div>
 
@@ -174,7 +182,13 @@ const MainSection = () => {
                     •••
                   </div>
                   {showPopup === file._id && (
-                    <PopupMenu show={true} onClose={() => setShowPopup(null)} postId={file._id} fileLink={file.fileLink} onDelete={handleDeleteFile} />
+                    <PopupMenu 
+                      show={true}
+                      onClose={() => setShowPopup(null)}
+                      postId={file._id} fileLink={file.fileLink}
+                      onDelete={handleDeleteFile}
+                      onRename={handleRenameFile}
+                    />
                   )}
                 </div>
                 <div className='image-container'></div>

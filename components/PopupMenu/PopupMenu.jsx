@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import './PopupMenu.css';
 
-const PopupMenu = ({ show, onClose, postId, fileLink , onDelete }) => {
+const PopupMenu = ({ show, onClose, postId, fileLink , onDelete , onRename }) => {
   const [isRenamePopupVisible, setRenamePopupVisible] = useState(false);
   const [newFileName, setNewFileName] = useState('');
   const menuRef = useRef(null);
@@ -56,9 +56,10 @@ const PopupMenu = ({ show, onClose, postId, fileLink , onDelete }) => {
   const handleRenameSubmit = async () => {
     try {
       const response = await axios.put(`/api/post/${postId}/edit-post`, { newFileName });
-
+      // const changedName = (response.data.post.fileName);
       if (response.status === 200) {
         toast.success('File renamed successfully!');
+        onRename(postId, newFileName);  // Update the file name in MainSection
         setRenamePopupVisible(false);
         onClose();
       } else {
