@@ -5,11 +5,12 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import './PopupMenu.css';
 
-const PopupMenu = ({ show, onClose, postId, fileLink }) => {
+const PopupMenu = ({ show, onClose, postId, fileLink , onDelete }) => {
   const [isRenamePopupVisible, setRenamePopupVisible] = useState(false);
   const [newFileName, setNewFileName] = useState('');
   const menuRef = useRef(null);
   const renamePopupRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -29,11 +30,12 @@ const PopupMenu = ({ show, onClose, postId, fileLink }) => {
   }, [onClose]);
 
   const handleDelete = async () => {
+    setLoading(true);
     try {
       const response = await axios.delete(`/api/post/${postId}/delete-post`);
-
       if (response.status === 200) {
-        toast.success('Post deleted successfully!');
+        toast.success('File Deleted successfully!');
+        onDelete(postId);
         onClose();
       } else {
         console.error('Deletion Error:', response.data.error);
@@ -42,6 +44,8 @@ const PopupMenu = ({ show, onClose, postId, fileLink }) => {
     } catch (error) {
       console.error('Deletion Request Failed:', error);
       toast.error('Failed to delete post.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -131,6 +135,13 @@ const PopupMenu = ({ show, onClose, postId, fileLink }) => {
           </li>
         </ul>
       </div>
+
+      {loading && (
+        <div className="flex flex-col items-center justify-center ml-2">
+          <p className='text-black'>Processing...</p>
+          <span className="loading loading-spinner loading-lg bg-black"></span>
+        </div>
+      )}  
 
       {isRenamePopupVisible && (
         <div className="rename-popup rounded-md" ref={renamePopupRef}>

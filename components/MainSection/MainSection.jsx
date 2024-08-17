@@ -72,6 +72,10 @@ const MainSection = () => {
     setShowPopup(showPopup === fileId ? null : fileId);
   };
 
+  const handleDeleteFile = (deletedFileId) => {
+    setFiles((prevFiles) => prevFiles.filter(file => file._id !== deletedFileId));
+  };
+
   return (
     <section className="main-section">
       <div className="left-nav">
@@ -170,7 +174,7 @@ const MainSection = () => {
                     •••
                   </div>
                   {showPopup === file._id && (
-                    <PopupMenu show={true} onClose={() => setShowPopup(null)} postId={file._id} fileLink={file.fileLink} />
+                    <PopupMenu show={true} onClose={() => setShowPopup(null)} postId={file._id} fileLink={file.fileLink} onDelete={handleDeleteFile} />
                   )}
                 </div>
                 <div className='image-container'></div>
